@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title> سِراج عرصات</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+
+    <link rel="icon" type="image/png" href="./favicon.png">
+    <link rel="apple-touch-icon" href="./icon.png">
+    <link rel="manifest" href="manifest.json">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="سِراج عرصات">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+    <!-- لون شريط المتصفح -->
+    <meta name="theme-color" content="#0d6efd">
+
+    <link rel="stylesheet" href="./themes.css">
+    <link rel="stylesheet" href="./main.css">
+
+    <script type="module" src="./firebase-config.js"></script>
+    <script type="module" src="./app.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+</head>
+
+<body data-theme="light">
+
+    <div id="loader">
+        <div class="spinner-border text-primary" style="width: 3.5rem; height: 3.5rem; border-width: 5px;"></div>
+        <h4 class="mt-4 text-white fw-bold animate__animated animate__pulse animate__infinite">
+            جاري تحميل Labwa Pro...
+        </h4>
+    </div>
+
+    <div class="sidebar-overlay" id="overlay"></div>
+
+    <div class="top-bar shadow-sm">
+        <button class="btn btn-light rounded-circle shadow-sm" id="toggleSidebar"
+            style="width: 50px; height: 50px; transition: transform 0.3s ease;">
+            <i class="bi bi-grid-fill fs-4 text-primary"></i>
+        </button>
+        <div class="text-center">
+            <h5 class="m-0 fw-800 text-uppercase tracking-wider text-primary animate__animated animate__fadeIn"
+                id="currentSystemTitle" style="font-weight: 800;">نظام التصريف</h5>
+            <small class="text-muted fw-bold" id="currentViewName">الرئيسية</small>
+        </div>
+        <div class="status-box d-flex align-items-center px-3 py-2">
+            <span id="statusDot"
+                class="status-dot online animate__animated animate__pulse animate__infinite"></span>
+
+            <span id="statusText" class="status-text">
+                سراج عرصات
+            </span>
+        </div>
+    </div>
+
+    <div class="sidebar shadow-lg" id="sidebar">
+        <div class="px-4 mb-4 text-center">
+            <h4 class="text-white fw-bold m-0" style="letter-spacing: 1px;">LABWA <span class="text-primary">PRO</span>
+            </h4>
+            <span class="badge bg-secondary bg-opacity-25 text-white-50 mt-1 px-3 py-1 rounded-pill small">لوحة التحكم
+                الفخمة</span>
+        </div>
+
+        <button onclick="showView('home', this)" class="active-view" id="btn-view-home">
+            <i class="bi bi-house-door"></i> الرئيسية
+        </button>
+        <button onclick="showView('reports', this)" id="btn-view-reports">
+            <i class="bi bi-pie-chart"></i> التقارير والتحليلات
+        </button>
+
+        <hr class="mx-3 my-2 opacity-25 text-white">
+
+
+        <button onclick="showView('accounts', this)" id="btn-view-accounts">
+            <i class="bi bi-bank"></i> الحسابات
+        </button>
+
+        <button onclick="showView('commissionReports', this)" id="btn-view-commissionReports">
+            <i class="bi bi-cash-coin"></i> تقرير العمولات
+        </button>
+
+        <button onclick="showView('match', this)" id="btn-view-match">
+            <i class="bi bi-calculator-fill"></i> مطابقة الدولار
+        </button>
+
+        <hr class="mx-3 my-2 opacity-25 text-white">
+
+        <button onclick="switchSystem('exchange', this)" class="active-system" id="btn-sys-exchange">
+            <i class="bi bi-arrow-left-right"></i> نظام التصريف
+        </button>
+        <button onclick="switchSystem('cash', this)" id="btn-sys-cash">
+            <i class="bi bi-wallet2"></i> نظام الحركات المالية
+        </button>
+
+        <hr class="mx-3 my-2 opacity-25 text-white">
+
+        <button class="text-danger border border-danger border-opacity-10 mx-3 rounded-3" id="btnDeleteRegister"
+            style="background: rgba(220, 53, 69, 0.05); font-weight: 700;">
+            <i class="bi bi-trash3-fill"></i> مسح السجل الكامل
+        </button>
+
+        <hr class="mx-3 my-2 opacity-25 text-white">
+
+        <button onclick="cycleTheme()" class="theme-btn">
+            <i class="bi bi-palette-fill"></i> تغيير الثيم التفاعلي
+        </button>
+
+        <div class="d-flex gap-2 px-3">
+            <button onclick="increaseTableFont()" class="flex-fill">
+                <i class="bi bi-zoom-in"></i>
+            </button>
+
+            <button onclick="decreaseTableFont()" class="flex-fill">
+                <i class="bi bi-zoom-out"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="container main-content">
+        <div id="lastActionAndStats" class="animate__animated animate__fadeInDown"></div>
+
+        <div id="formSection" class="view-section">
+            <div class="card-custom">
+                <form id="mainForm">
+                    <input type="hidden" id="editDocId">
+                    <div class="row g-4 align-items-end">
+                        <div class="col-lg-3 col-md-6">
+                            <label class="form-label fw-bold mb-2 text-secondary">نوع العملية</label>
+                            <div class="btn-group w-100 shadow-sm rounded-3 overflow-hidden p-1 bg-light" role="group">
+                                <input type="radio" class="btn-check" name="opType" id="type2" value="type1" checked>
+                                <label class="btn btn-outline-danger fw-bold border-0 py-2.5 rounded-3" for="type2"
+                                    id="labelType2">شراء 📉</label>
+
+                                <input type="radio" class="btn-check" name="opType" id="type1" value="type2">
+                                <label class="btn btn-outline-primary fw-bold border-0 py-2.5 rounded-3" for="type1"
+                                    id="labelType1">بيع 📈</label>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6" id="accountGroup" style="display: none;">
+                            <label class="form-label fw-bold mb-2 text-secondary">الحساب</label>
+                            <select class="form-select shadow-sm" id="accountName" style="width: 100%;">
+                            </select>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6">
+                            <label class="form-label fw-bold mb-2 text-secondary">المبلغ الإجمالي</label>
+                            <div class="input-group shadow-sm rounded-3 overflow-hidden">
+                                <input type="text" inputmode="decimal"
+                                    class="form-control number-format fw-bold text-primary" id="amount" required
+                                    placeholder="0" value="0">
+                                <span class="input-group-text bg-primary text-white border-0 px-3"><i
+                                        class="bi bi-currency-dollar fs-5"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- قسم العمولة -->
+                        <div class="col-lg-12" id="commissionSection" style="display: none;">
+                            <div class="card border-0 shadow-sm bg-light rounded-4 p-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <label class="form-label fw-bold text-secondary m-0">
+                                        <i class="bi bi-sliders me-1"></i>
+                                        العمولة المستقطعة
+                                    </label>
+                                    <span id="commissionValue" class="badge bg-success px-3 py-2 rounded-pill fs-6">
+                                        0 د.ع
+                                    </span>
+                                </div>
+
+                                <input type="range" class="form-range" id="commissionSlider" min="0" max="5000"
+                                    step="500" value="0">
+
+                                <div class="d-flex justify-content-between small text-muted">
+                                    <span>0</span>
+                                    <span id="commissionMaxLabel">5,000</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6" id="rateGroup">
+                            <label class="form-label fw-bold mb-2 text-secondary">سعر الصرف</label>
+                            <input type="text" inputmode="decimal" class="form-control number-format fw-bold" id="rate"
+                                placeholder="0" value="0">
+                            <div id="rateSuggestions" class="mt-2 d-flex flex-wrap gap-1.5 align-items-center"
+                                style="min-height: 25px;"></div>
+                        </div>
+
+                        <div class="col-lg-12 mt-4 text-center">
+                            <button type="submit" class="btn btn-modern btn-success w-100 fs-5 py-3 shadow"
+                                id="btnSave">
+                                حفظ السجل الآن
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="tableSection" class="view-section">
+            <div class="card-custom border-top border-primary border-4">
+                <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                    <h5 class="fw-bold m-0 text-main">
+                        <i class="bi bi-list-stars me-2 text-primary fs-4"></i>
+                        سجل العمليات المباشر
+                    </h5>
+                    <span class="badge rounded-pill bg-primary p-2 px-4 shadow-sm" id="rowCount"
+                        style="font-size: 0.9rem;">
+                        0 عملية مسجلة
+                    </span>
+                </div>
+                <!-- فلتر الحساب للحركات المالية -->
+                <div id="accountFilterWrapper" class="mb-4" style="display: none;">
+                    <div class="row g-3">
+                        <div class="col-lg-6">
+                            <label class="form-label fw-bold text-secondary">
+                                <i class="bi bi-funnel-fill me-1"></i>
+                                فلترة حسب الحساب
+                            </label>
+
+                            <select id="accountFilter" class="form-select shadow-sm" style="width: 100%;">
+                                <option value="">كل الحسابات</option>
+                            </select>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <label class="form-label fw-bold text-secondary">
+                                <i class="bi bi-lightning-fill me-1"></i>
+                                اقتراحات سريعة
+                            </label>
+
+                            <div id="accountSuggestions" class="d-flex flex-wrap gap-2">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover text-center" id="mainDataTable">
+                        <thead id="tableHeader"></thead>
+                        <tbody id="dataTableBody" class="fw-bold"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="reportsSection" class="view-section" style="display: none;">
+            <div class="card-custom border-top border-info border-4">
+                <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                    <h4 id="reportMainTitle" class="m-0 text-info fw-bold">
+                        <i class="bi bi-graph-up-arrow me-2 fs-3"></i>
+                        التحليل التجميعي للبيانات
+                    </h4>
+
+                    <button class="btn btn-success rounded-pill px-4 shadow-sm" onclick="shareReport()">
+                        مشاركة التقرير
+                    </button>
+                </div>
+
+
+                <div id="weightedAverageCards"></div>
+                <div class="table-responsive">
+                    <table class="table table-hover text-center" id="reportTable">
+                        <thead id="reportHeader"></thead>
+                        <tbody id="reportTableBody" class="fw-bold"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- صفحة حسابات العمولات -->
+        <div id="accountsSection" class="view-section" style="display:none;">
+
+            <div class="card-custom border-top border-warning border-4">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="fw-bold text-warning">
+                        <i class="bi bi-bank2 me-2"></i>
+                        حسابات العمولات
+                    </h4>
+                </div>
+
+                <form id="accountForm" class="mb-4">
+
+                    <input type="hidden" id="accountEditId">
+
+                    <div class="row g-3">
+
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">
+                                اسم الحساب
+                            </label>
+
+                            <input type="text" class="form-control" id="companyAccountName" required>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">
+                                عمولة الصرف
+                            </label>
+
+                            <input type="text" class="form-control number-format" id="withdrawCommission" value="0">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">
+                                عمولة القبض
+                            </label>
+
+                            <input type="text" class="form-control number-format" id="depositCommission" value="0">
+                        </div>
+
+                        <div class="col-12">
+                            <button type="submit" id="saveAccountBtn" class="btn btn-warning w-100 fw-bold py-3">
+
+                                <i class="bi bi-plus-circle-fill me-2"></i>
+                                حفظ الحساب
+
+                            </button>
+                        </div>
+
+                    </div>
+
+                </form>
+
+                <div class="table-responsive">
+                    <table class="table table-hover text-center">
+
+                        <thead>
+                            <tr>
+                                <th>الحساب</th>
+                                <th>عمولة الصرف</th>
+                                <th>عمولة القبض</th>
+                                <th>التحكم</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="accountsTableBody"></tbody>
+
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- تقرير عمولات الشركات -->
+        <div id="commissionReportsSection" class="view-section" style="display:none;">
+            <div class="card-custom border-top border-success border-4">
+                <h4 class="fw-bold text-success mb-4">
+                    <i class="bi bi-cash-stack me-2"></i>
+                    تقرير عمولات الشركات
+                </h4>
+
+                <div id="commissionKpis"></div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover text-center">
+                        <thead>
+                            <tr>
+                                <th>الحساب</th>
+                                <th> الحركة</th>
+                                <th>الحركات<br>الكلية</th>
+                                <th>عمولات<br>الزبائن</th>
+                                <th>عمولات<br>الشركة</th>
+                            </tr>
+                        </thead>
+                        <tbody id="commissionReportBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="toast-container position-fixed" id="toastContainer"></div>
+
+    <div class="modal fade" id="confirmModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="modal-body text-center p-5">
+                    <div class="mb-4 text-danger animate__animated animate__shakeX">
+                        <i class="bi bi-exclamation-triangle-fill display-1"></i>
+                    </div>
+                    <h3 class="fw-bold text-dark" id="modalTitle">تأكيد الإجراء</h3>
+                    <p class="text-muted fs-5 mt-3" id="modalText">هل أنت متأكد من رغبتك في تنفيذ هذا الإجراء؟</p>
+                    <div class="d-flex justify-content-center gap-3 mt-4">
+                        <button type="button" class="btn btn-light btn-modern px-4"
+                            data-bs-dismiss="modal">تراجع</button>
+                        <button type="button" class="btn btn-danger btn-modern px-5" id="confirmActionBtn">نعم،
+                            متأكد</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <div class="fab-container" id="fabContainer">
+
+        <div class="fab-menu" id="fabMenu">
+
+            <button class="fab-option" id="fabSwitch" title="تبديل النظام">
+                <i class="bi bi-currency-dollar"></i>
+                <span>تبديل النظام</span>
+            </button>
+
+            <button class="fab-option" id="fabRefresh" title="تحديث">
+                <i class="bi bi-arrow-clockwise"></i>
+                <span>تحديث</span>
+            </button>
+        </div>
+
+        <button class="fab-main" id="fabMain">
+            <i class="bi bi-plus-lg"></i>
+        </button>
+
+    </div>
+
+    <div class="fab-overlay" id="fabOverlay"></div>
+
+    <div id="matchSection" style="display: none;" class="container-fluid animate__animated animate__fadeIn">
+
+        <!-- الرصيد الفعلي المتوقع -->
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="card-custom main-balance-wrapper text-center">
+                    <div class="balance-content">
+                        <span class="balance-label">الرصيد الفعلي المتوقع</span>
+                        <div class="main-balance-text-container">
+                            <span class="currency-symbol">$</span>
+                            <span id="totalCurrentBalance" class="balance-value">0</span>
+                        </div>
+                    </div>
+                    <div class="balance-decoration"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- الكروت الإحصائية (بدون أي تعديل) -->
+        <div class="row g-2 mb-3">
+            <div class="col-12 col-md-4">
+                <div class="stat-card-premium shadow-sm border-info-subtle">
+                    <div class="stat-icon-wrapper bg-info">
+                        <i class="bi bi-cpu text-white"></i>
+                    </div>
+                    <div class="stat-info-text">
+                        <small>رصيد النظام</small>
+                        <div class="h5 fw-bold m-0" id="storedSystemBalance">$0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-4">
+                <div class="stat-card-premium shadow-sm border-success-subtle">
+                    <div class="stat-icon-wrapper bg-success">
+                        <i class="bi bi-graph-up text-white"></i>
+                    </div>
+                    <div class="stat-info-text">
+                        <small>إجمالي البيع</small>
+                        <div class="h6 fw-bold text-success m-0" id="totalSellMatch">$0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-4">
+                <div class="stat-card-premium shadow-sm border-danger-subtle">
+                    <div class="stat-icon-wrapper bg-danger">
+                        <i class="bi bi-graph-down text-white"></i>
+                    </div>
+                    <div class="stat-info-text">
+                        <small>إجمالي الشراء</small>
+                        <div class="h6 fw-bold text-danger m-0" id="totalBuyMatch">$0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- فرق البيع والشراء -->
+        <div class="row mb-3">
+
+            <div class="col-12">
+
+                <div class="card-custom shadow-sm border-warning border-2">
+
+                    <div class="d-flex align-items-center mb-3">
+
+                        <div class="stat-icon-wrapper bg-warning me-3">
+                            <i class="bi bi-cash-stack text-white"></i>
+                        </div>
+
+                        <div>
+                            <h5 class="fw-bold m-0">
+                                حساب فرق البيع والشراء
+                            </h5>
+
+                            <small class="text-muted">
+                                ادخل سعر التصريف اليومي
+                            </small>
+                        </div>
+
+                    </div>
+
+                    <!-- حقل سعر التصريف -->
+                    <div class="mb-3">
+
+                        <label class="form-label fw-bold">
+                            سعر التصريف اليومي
+                        </label>
+
+                        <div class="input-group">
+
+                            <input type="text" inputmode="decimal" id="dailyRateInput"
+                                class="form-control number-format fw-bold text-primary" placeholder="مثال: 1320">
+
+                            <span class="input-group-text">
+                                د.ع
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <!-- النتيجة -->
+                    <div id="dailyDifferenceResult" class="alert alert-secondary text-center fw-bold fs-5 mb-0">
+
+                        ادخل سعر التصريف لعرض النتيجة
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- أدوات المطابقة -->
+        <div class="card-custom control-panel-match">
+            <h6 class="fw-bold mb-3">
+                <i class="bi bi-sliders me-2 text-primary"></i>
+                أدوات المطابقة
+            </h6>
+
+            <!-- أزرار الزيادة والنقصان -->
+            <div class="mb-3">
+                <label class="form-label fw-bold text-secondary">
+                    تعديل رصيد النظام مباشرة
+                </label>
+
+                <div class="input-group shadow-sm flex-nowrap">
+
+                    <!-- زر ناقص -->
+                    <button type="button" class="btn btn-danger px-3" id="decreaseBalanceBtn"
+                        onclick="adjustSystemBalance('decrease')">
+                        <i class="bi bi-dash-lg"></i>
+                    </button>
+
+                    <!-- حقل الرقم -->
+                    <input type="text" id="newSystemBalance" class="form-control number-format text-center fw-bold"
+                        placeholder="أدخل المبلغ" value="0" inputmode="numeric">
+
+                    <!-- زر زائد -->
+                    <button type="button" class="btn btn-success px-3" id="increaseBalanceBtn"
+                        onclick="adjustSystemBalance('increase')">
+                        <i class="bi bi-plus-lg"></i>
+                    </button>
+
+                </div>
+
+                <small class="text-muted d-block mt-2">
+                    أدخل المبلغ ثم اضغط (+) لإضافته أو (-) لطرحه من رصيد النظام.
+                </small>
+            </div>
+
+            <div class="row g-2">
+
+                <div class="col-6">
+                    <button class="btn btn-modern btn-warning py-3 w-100 fw-bold shadow-sm"
+                            onclick="syncBalances()">
+                        <i class="bi bi-arrow-repeat me-2"></i>
+                        تصفية الحسابات
+                    </button>
+                </div>
+
+                <div class="col-6">
+                    <button class="btn btn-modern btn-primary py-3 w-100 fw-bold shadow-sm"
+                            onclick="openQuickMatchModal()">
+                        <i class="bi bi-lightning-charge-fill me-2"></i>
+                        المطابقة السريعة
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- تنبيه -->
+            <div class="info-alert mt-3">
+                <i class="bi bi-exclamation-circle-fill"></i>
+                <span>
+                    مطابقة الرصيد تجعل رصيد النظام مساوياً للموجود الفعلي في المحل،
+                    ثم يتم حذف سجل التصريف بالكامل وبدء دورة جديدة.
+                </span>
+            </div>
+        </div>
+
+        <!-- سجل آخر 10 حركات -->
+        <div class="card-custom mt-3 border-top border-primary border-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="fw-bold m-0 text-primary">
+                    <i class="bi bi-clock-history me-2"></i>
+                    آخر 10 حركات على رصيد النظام
+                </h6>
+
+                <span class="badge bg-primary rounded-pill px-3 py-2" id="balanceLogCount">
+                    0 حركة
+                </span>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover text-center align-middle mb-0">
+                    <thead id="balanceLogsHeader">
+                        <tr>
+                            <th>العملية</th>
+                            <th>المبلغ</th>
+                            <th>الرصيد بعد العملية</th>
+                            <th>التاريخ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="balanceLogsBody" class="fw-bold">
+                        <tr>
+                            <td colspan="4" class="text-muted py-4">
+                                لا توجد حركات مسجلة حالياً
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="quickMatchModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">
+                        ⚡ المطابقة السريعة
+                    </h5>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="alert alert-info text-center">
+                        <div class="fw-bold">
+                            الرصيد المتوقع
+                        </div>
+
+                        <div class="fs-3 fw-bold">
+                            $
+                            <span id="expectedBalanceText">0</span>
+                        </div>
+                    </div>
+
+                    <label class="fw-bold mb-2">
+                        الرصيد الفعلي بالمحل
+                    </label>
+
+                    <input type="text"
+                        id="actualBalanceInput"
+                        class="form-control text-center fw-bold fs-5"
+                        value="0">
+
+                    <div id="quickMatchResult"
+                        class="mt-3">
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button class="btn btn-light"
+                            data-bs-dismiss="modal">
+                        إلغاء
+                    </button>
+
+                    <button class="btn btn-primary"
+                            onclick="executeQuickMatch()">
+                        تنفيذ المطابقة
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
