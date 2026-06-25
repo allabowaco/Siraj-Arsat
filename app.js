@@ -3733,3 +3733,11 @@ function checkForOldRecords() {
         showOldRecordsModal();
     }
 }
+
+const commissionSlider = document.getElementById('commissionSlider');
+
+['mouseup', 'touchend'].forEach(evt => {
+    commissionSlider.addEventListener(evt, () => {
+        document.getElementById('amount').blur();
+    });
+});
