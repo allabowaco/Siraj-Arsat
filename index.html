@@ -36,21 +36,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
-    <style>
-        .sidebar-mini-buttons .mini-btn{
-            display:flex !important;
-            justify-content:center !important;
-            align-items:center !important;
-        
-            padding:0 !important;
-            height:48px;
-        }
-        
-        .sidebar-mini-buttons .mini-btn i{
-            margin:0 !important;
-            font-size:1.3rem;
-        }
-    </style>
 </head>
 
 <body data-theme="light">
@@ -105,24 +90,29 @@
         <hr class="mx-3 my-2 opacity-25 text-white">
 
 
-        <div class="d-flex gap-2 px-3 my-2 sidebar-mini-buttons">
-            <button onclick="showView('reports', this)"
-                id="btn-view-reports"
-                class="flex-fill mini-btn">
-                <i class="bi bi-pie-chart-fill"></i>
+        <div class="d-flex justify-content-center gap-2 px-3">
+
+            <button onclick="showView('accounts', this)"
+                    id="btn-view-accounts"
+                    class="sidebar-icon-btn"
+                    title="الحسابات">
+                <i class="bi bi-bank"></i>
             </button>
-        
+
             <button onclick="showView('commissionReports', this)"
-                id="btn-view-commissionReports"
-                class="flex-fill mini-btn">
+                    id="btn-view-commissionReports"
+                    class="sidebar-icon-btn"
+                    title="تقرير العمولات">
                 <i class="bi bi-cash-coin"></i>
             </button>
-        
+
             <button onclick="showView('match', this)"
-                id="btn-view-match"
-                class="flex-fill mini-btn">
+                    id="btn-view-match"
+                    class="sidebar-icon-btn"
+                    title="مطابقة الدولار">
                 <i class="bi bi-calculator-fill"></i>
             </button>
+
         </div>
 
         <hr class="mx-3 my-2 opacity-25 text-white">
