@@ -37,13 +37,18 @@
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
     <style>
-        .sidebar .d-flex button {
-            height: 48px;
-            padding: 0;
+        .sidebar-mini-buttons .mini-btn{
+            display:flex !important;
+            justify-content:center !important;
+            align-items:center !important;
+        
+            padding:0 !important;
+            height:48px;
         }
         
-        .sidebar .d-flex button i {
-            font-size: 1.2rem;
+        .sidebar-mini-buttons .mini-btn i{
+            margin:0 !important;
+            font-size:1.3rem;
         }
     </style>
 </head>
@@ -100,23 +105,23 @@
         <hr class="mx-3 my-2 opacity-25 text-white">
 
 
-        <div class="d-flex gap-2 px-3 my-2">
+        <div class="d-flex gap-2 px-3 my-2 sidebar-mini-buttons">
             <button onclick="showView('reports', this)"
                 id="btn-view-reports"
-                class="flex-fill d-flex justify-content-center align-items-center">
-                <i class="bi bi-pie-chart fs-5"></i>
+                class="flex-fill mini-btn">
+                <i class="bi bi-pie-chart-fill"></i>
             </button>
         
             <button onclick="showView('commissionReports', this)"
                 id="btn-view-commissionReports"
-                class="flex-fill d-flex justify-content-center align-items-center">
-                <i class="bi bi-cash-coin fs-5"></i>
+                class="flex-fill mini-btn">
+                <i class="bi bi-cash-coin"></i>
             </button>
         
             <button onclick="showView('match', this)"
                 id="btn-view-match"
-                class="flex-fill d-flex justify-content-center align-items-center">
-                <i class="bi bi-calculator-fill fs-5"></i>
+                class="flex-fill mini-btn">
+                <i class="bi bi-calculator-fill"></i>
             </button>
         </div>
 
