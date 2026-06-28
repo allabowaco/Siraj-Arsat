@@ -1535,8 +1535,6 @@ document.getElementById('mainForm').onsubmit = async (e) => {
             'danger'
         );
 
-        showOldRecordsModal();
-
         return;
     }
 
@@ -3729,9 +3727,6 @@ function checkForOldRecords() {
         return recordString !== todayString;
     });
 
-    if (hasOldRecords) {
-        showOldRecordsModal();
-    }
 }
 
 const commissionSlider = document.getElementById('commissionSlider');
