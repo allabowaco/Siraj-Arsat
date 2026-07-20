@@ -1,6 +1,6 @@
 {
-  "name": "سِراج عرصات",
-  "short_name": "سِراج عرصات",
+  "name": "Google Chat",
+  "short_name": "Google Chat",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",
